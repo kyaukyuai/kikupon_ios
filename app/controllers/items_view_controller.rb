@@ -7,7 +7,9 @@ class ItemsViewController < UIViewController
 
                 self.view.backgroundColor = UIColor.greenColor
                 self.title = "きくぽん"
-                right_button = UIBarButtonItem.alloc.initWithTitle("UserName", style: UIBarButtonItemStylePlain, target:self, action:'push')
+                ApplicationUser.load
+                user = ApplicationUser.sharedUser
+                right_button = UIBarButtonItem.alloc.initWithTitle(user.user_name, style: UIBarButtonItemStylePlain, target:self, action:'push')
                 self.navigationItem.rightBarButtonItem = right_button
 
                 BW::HTTP.get('http://recipe4u.herokuapp.com/search.json?service=rakuten&keyword=tomato') do |response|

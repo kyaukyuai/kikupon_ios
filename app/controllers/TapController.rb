@@ -2,14 +2,13 @@ class TapController < UIViewController
   def viewDidLoad
     super
 
-
     self.view.backgroundColor = UIColor.whiteColor
 
-     @label = UILabel.alloc.initWithFrame(CGRectZero)
-     @label.text = "きくぽん"
-     @label.sizeToFit
-     @label.center = CGPointMake(self.view.frame.size.width / 2, self.view.frame.size.height / 4)
-     self.view.addSubview @label
+    @label = UILabel.alloc.initWithFrame(CGRectZero)
+    @label.text = "きくぽん"
+    @label.sizeToFit
+    @label.center = CGPointMake(self.view.frame.size.width / 2, self.view.frame.size.height / 4)
+    self.view.addSubview @label
 
     self.title = "ログイン"
     right_button = UIBarButtonItem.alloc.initWithTitle("Push", style: UIBarButtonItemStyleBordered, target:self, action:'push')
@@ -61,11 +60,12 @@ class TapController < UIViewController
             NSLog("#{user_id}")
             user_name = anAccount.username
             NSLog("#{user_name}")
-            @user = User.new(:twitter_user_id => user_id,
-                             :username => user_name
-                            )
+            user = ApplicationUser.sharedUser
+            user.twitter_user_id = user_id
+            user.user_name = user_name
+            user.save
             alert = UIAlertView.alloc.init
-            alert.message = "user_id: #{@user.twitter_user_id}\nuser_name: #{user_name}"
+            alert.message = "user_id: #{user.twitter_user_id}\nuser_name: #{user_name}"
             alert.delegate = self
             alert.addButtonWithTitle "OK"
             alert.show
