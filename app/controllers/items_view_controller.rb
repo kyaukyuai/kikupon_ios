@@ -26,14 +26,17 @@ class ItemsViewController < UIViewController
         end
         
         def push
-                @index = @index + 1
                 @label.removeFromSuperview
                 @image.removeFromSuperview
-                if @index < 3
+                if @index < 2
+                        @index = @index + 1
                         self.display_view
                 else
+                        self.display_view
                         alert = UIAlertView.new
                         alert.message = "あなたにおすすめするレシピは\nもうありません"
+                        alert.delegate = self
+                        alert.addButtonWithTitle "了解"
                         alert.show
                 end
         end
