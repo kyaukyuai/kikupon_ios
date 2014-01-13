@@ -10,8 +10,10 @@ class AppDelegate
     nav_controller = UINavigationController.alloc.initWithRootViewController(controller)
     alphabet_controller = AlphabetController.alloc.initWithNibName(nil, bundle: nil)
 
+    item_nav_controller = UINavigationController.alloc.initWithRootViewController(ItemsViewController.new)
+
     tab_controller = UITabBarController.alloc.initWithNibName(nil, bundle: nil)
-    tab_controller.viewControllers = [nav_controller, alphabet_controller]
+    tab_controller.viewControllers = [nav_controller, alphabet_controller, item_nav_controller]
     @window.rootViewController = tab_controller
 
     true
