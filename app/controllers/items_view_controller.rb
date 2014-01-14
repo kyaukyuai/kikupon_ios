@@ -12,9 +12,10 @@ class ItemsViewController < UIViewController
                 right_button = UIBarButtonItem.alloc.initWithTitle(user.user_name, style: UIBarButtonItemStylePlain, target:self, action:'push')
                 self.navigationItem.rightBarButtonItem = right_button
 
-                BW::HTTP.get('http://recipe4u.herokuapp.com/search.json?service=rakuten&keyword=tomato') do |response|
+                BW::HTTP.get('http://kikupon-api.herokuapp.com/s/v1/get_rests?id=1234&lat=35.664035&lng=139.698212') do |response|
                         if response.ok?
                                 @feed = BW::JSON.parse(response.body.to_str)
+                                puts @feed
                                 self.display_view
                         else
                                 App.alert(response.error_message)
@@ -52,12 +53,12 @@ class ItemsViewController < UIViewController
         def display_view
                 @label = UILabel.alloc.initWithFrame(CGRectZero)
                 @label.backgroundColor = UIColor.yellowColor
-                @label.text = @feed[:recipes][@index][:recipe][:title]
+                @label.text = @feed[@index][:name]
                 @label.sizeToFit
                 @label.center = CGPointMake(self.view.frame.size.width / 2, 100)
                 self.view.addSubview @label
                 
-                image_data = NSData.dataWithContentsOfURL(NSURL.URLWithString(@feed[:recipes][@index][:recipe][:image]))
+                image_data = NSData.dataWithContentsOfURL(NSURL.URLWithString(@feed[@index][:image_url][0][:shop_image1]))
                 @image = UIImageView.alloc.initWithImage(UIImage.imageWithData(image_data))
                 @image.center = CGPointMake(self.view.frame.size.width / 2, 225)
                 self.view.addSubview @image
