@@ -9,7 +9,7 @@ class ItemsViewController < UIViewController
                 self.title = "きくぽん"
                 ApplicationUser.load
                 user = ApplicationUser.sharedUser
-                right_button = UIBarButtonItem.alloc.initWithTitle(user.user_name, style: UIBarButtonItemStylePlain, target:self, action:'push')
+                right_button = UIBarButtonItem.alloc.initWithTitle('設定', style: UIBarButtonItemStylePlain, target:self, action:'push')
                 self.navigationItem.rightBarButtonItem = right_button
 
                 self.load
