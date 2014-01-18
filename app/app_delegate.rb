@@ -4,16 +4,11 @@ class AppDelegate
     @window = UIWindow.alloc.initWithFrame(UIScreen.mainScreen.bounds)
     @window.makeKeyAndVisible
 
-    # This is our new line!
-    #@window.rootViewController = TapController.alloc.initWithNibName(nil, bundle: nil)
-    controller = TapController.alloc.initWithNibName(nil, bundle: nil)
-    nav_controller = UINavigationController.alloc.initWithRootViewController(controller)
-    alphabet_controller = AlphabetController.alloc.initWithNibName(nil, bundle: nil)
-
+    @loginViewController = UINavigationController.alloc.initWithRootViewController(LoginViewController.new)
     @itemViewController = UINavigationController.alloc.initWithRootViewController(ItemsViewController.new)
 
-    tab_controller = UITabBarController.alloc.initWithNibName(nil, bundle: nil)
-    tab_controller.viewControllers = [nav_controller, alphabet_controller, @itemViewController]
+    tab_controller = UITabBarController.new
+    tab_controller.viewControllers = [@loginViewController, @itemViewController]
     @window.rootViewController = tab_controller
 
     true
