@@ -31,6 +31,7 @@ class LoginViewController < UIViewController
     hoge_button.tintColor = UIColor.blackColor
     hoge_button.addTarget(self, action:'getFacebookInfo', forControlEvents:UIControlEventTouchUpInside)
     self.view.addSubview hoge_button
+    @alert = UIAlertView.new
   end
 
   def push
@@ -95,15 +96,18 @@ class LoginViewController < UIViewController
         user.twitter_user_id = user_id
         user.user_name = user_name
         user.save
-        alert = UIAlertView.alloc.init
-        alert.message = "user_id: #{user.twitter_user_id}\nuser_name: #{user_name}"
-        alert.delegate = self
-        alert.addButtonWithTitle "OK"
-        alert.show
+        @alert.message = "user_id: #{user.twitter_user_id}\nuser_name: #{user_name}"
+        @alert.delegate = self
+        @alert.addButtonWithTitle "login success"
+        @alert.show
       else
         NSLog("error: #{error.description}")
       end
     end
     @account_store.requestAccessToAccountsWithType(@account_type, options: options, completion: completion)
+  end
+  def alertView(alertView, clickedButtonAtIndex:buttonIndex)
+    item_view_controller = ItemsViewController.new
+    self.navigationController.pushViewController(item_view_controller, animated: true)
   end
 end
