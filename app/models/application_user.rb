@@ -6,12 +6,14 @@ class ApplicationUser
     end
 
     def save
+        App::Persistence['user_id'] = @user_id
         App::Persistence['twitter_user_id'] = @twitter_user_id
         App::Persistence['facebook_user_id'] = @facebook_user_id
         App::Persistence['user_name'] = @user_name
         App::Persistence['email'] = @email
     end
     def load
+        self.user_id          = App::Persistence['user_id']
         self.twitter_user_id  = App::Persistence['twitter_user_id']
         self.facebook_user_id = App::Persistence['facebook_user_id']
         self.user_name        = App::Persistence['user_name']
