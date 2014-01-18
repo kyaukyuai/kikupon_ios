@@ -24,19 +24,18 @@ class ItemsViewController < UIViewController
                 end
                 @right_swipe.direction = UISwipeGestureRecognizerDirectionRight
 
-                @right_swipe = view.when_swiped do
+                @down_swipe = view.when_swiped do
                         self.reload
                 end
-                @right_swipe.direction = UISwipeGestureRecognizerDirectionDown
+                @down_swipe.direction = UISwipeGestureRecognizerDirectionDown
         end
         
         def load
                 geo_info = GeoInfo.new
                 geo_info.load
-                lat = geo_info.lat
-                lng = geo_info.lng
+                request_url = 'http://kikupon-api.herokuapp.com/s/v1/get_rests?id=1234&lat=' + geo_info.lat.to_s + '&lng=' + geo_info.lng.to_s
 
-                BW::HTTP.get('http://kikupon-api.herokuapp.com/s/v1/get_rests?id=1234&lat=' + lat.to_s + '&lng=' + lng.to_s) do |response|
+                BW::HTTP.get(request_url) do |response|
                         if response.ok?
                                 @feed = BW::JSON.parse(response.body.to_str)
                                 self.write_view
@@ -52,33 +51,31 @@ class ItemsViewController < UIViewController
                 self.load
         end
 
+        def show_no_shop
+                alert = UIAlertView.new
+                alert.message = "あなたにおすすめするレシピは\nもうありません"
+                alert.delegate = self
+                alert.addButtonWithTitle "了解"
+                alert.show
+        end
+
         def push
-                self.remove_view
-                if @index < @feed.count-1
+                if @index < @feed.count - 1
                         @index = @index + 1
+                        self.remove_view
                         self.write_view
                 else
-                        self.write_view
-                        alert = UIAlertView.new
-                        alert.message = "あなたにおすすめするレシピは\nもうありません"
-                        alert.delegate = self
-                        alert.addButtonWithTitle "了解"
-                        alert.show
+                        self.show_no_shop
                 end
         end
 
         def pull
-                self.remove_view
                 if @index > 0
                         @index = @index - 1
+                        self.remove_view
                         self.write_view
                 else
-                        self.write_view
-                        alert = UIAlertView.new
-                        alert.message = "あなたにおすすめするレシピは\nもうありません"
-                        alert.delegate = self
-                        alert.addButtonWithTitle "了解"
-                        alert.show
+                        self.show_no_shop
                 end
         end
 
