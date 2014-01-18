@@ -16,3 +16,4 @@ nbproject
 .idea
 Gemfile.lock
 .bundle
+vendor
