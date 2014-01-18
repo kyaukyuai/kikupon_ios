@@ -12,7 +12,7 @@ class ItemsViewController < UIViewController
                 right_button = UIBarButtonItem.alloc.initWithTitle(user.user_name, style: UIBarButtonItemStylePlain, target:self, action:'push')
                 self.navigationItem.rightBarButtonItem = right_button
 
-                self.load_view
+                self.load
                 
                 @left_swipe = view.when_swiped do
                         self.push
@@ -30,7 +30,7 @@ class ItemsViewController < UIViewController
                 @right_swipe.direction = UISwipeGestureRecognizerDirectionDown
         end
         
-        def load_view
+        def load
                 geo_info = GeoInfo.new
                 geo_info.load
                 lat = geo_info.lat
@@ -46,18 +46,10 @@ class ItemsViewController < UIViewController
                 end
         end
 
-        def remove_view
-                @label.removeFromSuperview
-                @image.removeFromSuperview
-                @category.removeFromSuperview
-                @budget.removeFromSuperview
-                @opentime.removeFromSuperview
-        end
-
         def reload
                 @index = 0
                 self.remove_view
-                self.load_view
+                self.load
         end
 
         def push
@@ -155,5 +147,13 @@ class ItemsViewController < UIViewController
                 @other_shop_button.tintColor = UIColor.blackColor
                 self.view.addSubview @other_shop_button
                 @other_shop_button.addTarget(self, action:'push', forControlEvents:UIControlEventTouchUpInside)
+        end
+
+        def remove_view
+                @label.removeFromSuperview
+                @image.removeFromSuperview
+                @category.removeFromSuperview
+                @budget.removeFromSuperview
+                @opentime.removeFromSuperview
         end
 end
