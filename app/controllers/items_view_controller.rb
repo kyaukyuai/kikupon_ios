@@ -12,20 +12,7 @@ class ItemsViewController < UIViewController
                 right_button = UIBarButtonItem.alloc.initWithTitle(user.user_name, style: UIBarButtonItemStylePlain, target:self, action:'push')
                 self.navigationItem.rightBarButtonItem = right_button
 
-                # 位置情報取得
-                geo_info = GeoInfo.new
-                geo_info.load
-                lat = geo_info.lat
-                lng = geo_info.lng
-
-                BW::HTTP.get('http://kikupon-api.herokuapp.com/s/v1/get_rests?id=1234&lat=' + lat.to_s + '&lng=' + lng.to_s) do |response|
-                        if response.ok?
-                                @feed = BW::JSON.parse(response.body.to_str)
-                                self.display_view
-                        else
-                                App.alert(response.error_message)
-                        end
-                end
+                self.load_view
                 
                 @left_swipe = view.when_swiped do
                         self.push
@@ -38,19 +25,48 @@ class ItemsViewController < UIViewController
                 @right_swipe.direction = UISwipeGestureRecognizerDirectionRight
 
                 @right_swipe = view.when_swiped do
-                        self.pull
+                        self.reload
                 end
                 @right_swipe.direction = UISwipeGestureRecognizerDirectionDown
         end
         
-        def push
+        def load_view
+                geo_info = GeoInfo.new
+                geo_info.load
+                lat = geo_info.lat
+                lng = geo_info.lng
+
+                BW::HTTP.get('http://kikupon-api.herokuapp.com/s/v1/get_rests?id=1234&lat=' + lat.to_s + '&lng=' + lng.to_s) do |response|
+                        if response.ok?
+                                @feed = BW::JSON.parse(response.body.to_str)
+                                self.write_view
+                        else
+                                App.alert(response.error_message)
+                        end
+                end
+        end
+
+        def remove_view
                 @label.removeFromSuperview
                 @image.removeFromSuperview
+                @category.removeFromSuperview
+                @budget.removeFromSuperview
+                @opentime.removeFromSuperview
+        end
+
+        def reload
+                @index = 0
+                self.remove_view
+                self.load_view
+        end
+
+        def push
+                self.remove_view
                 if @index < @feed.count-1
                         @index = @index + 1
-                        self.display_view
+                        self.write_view
                 else
-                        self.display_view
+                        self.write_view
                         alert = UIAlertView.new
                         alert.message = "あなたにおすすめするレシピは\nもうありません"
                         alert.delegate = self
@@ -60,13 +76,12 @@ class ItemsViewController < UIViewController
         end
 
         def pull
-                @label.removeFromSuperview
-                @image.removeFromSuperview
+                self.remove_view
                 if @index > 0
                         @index = @index - 1
-                        self.display_view
+                        self.write_view
                 else
-                        self.display_view
+                        self.write_view
                         alert = UIAlertView.new
                         alert.message = "あなたにおすすめするレシピは\nもうありません"
                         alert.delegate = self
@@ -81,7 +96,7 @@ class ItemsViewController < UIViewController
                 self
         end
 
-        def display_view
+        def write_view
                 @label = UILabel.alloc.initWithFrame(CGRectZero)
                 @label.backgroundColor = UIColor.yellowColor
                 @label.text = @feed[@index][:name]
