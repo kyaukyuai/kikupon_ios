@@ -3,15 +3,14 @@ class AppDelegate
     return true if RUBYMOTION_ENV == 'test'
 
     @window = UIWindow.alloc.initWithFrame(UIScreen.mainScreen.bounds)
-    @window.makeKeyAndVisible
 
-    @loginViewController = UINavigationController.alloc.initWithRootViewController(LoginViewController.new)
-    @itemViewController = UINavigationController.alloc.initWithRootViewController(ItemsViewController.new)
+    loginViewController = UINavigationController.alloc.initWithRootViewController(LoginViewController.new)
+    shop_controller = UINavigationController.alloc.initWithRootViewController(ShopController.new)
 
     tab_controller = UITabBarController.new
-    tab_controller.viewControllers = [@loginViewController, @itemViewController]
+    tab_controller.viewControllers = [loginViewController, shop_controller]
     @window.rootViewController = tab_controller
-
+    @window.makeKeyAndVisible
     true
   end
 end
